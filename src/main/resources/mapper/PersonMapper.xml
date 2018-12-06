@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="PersonMapper" >
+  <sql id="Base_Column_List">
+    person_id, person_name, person_code, person_sex, person_phone, person_remark, level_id, department1_id, department2_id, person_remark1, person_remark2, person_remark3, person_remark4, logic_delete, created_by, updated_by, created_time, updated_time, conf_region_id, conf_dept_id
+  </sql>
+
+  <select id="selectByPrimaryKey" resultType="pd" parameterType="pd">
+    select
+    <include refid="Base_Column_List" />
+    from ass_level
+    where level_id = #{level_id,jdbcType=BIGINT}
+  </select>
+
+  <insert id="insert" parameterType="pd">
+    insert into ass_level ( person_name, person_code, person_sex, person_phone, person_remark, level_id, department1_id, department2_id, person_remark1, person_remark2, person_remark3, person_remark4, logic_delete, created_by, updated_by, created_time, updated_time, conf_region_id, conf_dept_id
+    )
+    values (
+    #{person_name}, #{person_code}, #{person_sex}, #{person_phone}, #{person_remark}, #{level_id}, #{department1_id}, #{department2_id}, #{person_remark1}, #{person_remark2}, #{person_remark3}, #{person_remark4}, #{logic_delete}, #{created_by}, #{updated_by}, #{created_time}, #{updated_time}, #{conf_region_id}, #{conf_dept_id}
+    )
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="pd">
+    update ass_level
+    <set>
+      <if test="person_name != null" >
+        person_name = #{person_name},
+      </if>
+      <if test="person_code != null" >
+        person_code = #{person_code},
+      </if>
+      <if test="person_sex != null" >
+        person_sex = #{person_sex},
+      </if>
+      <if test="person_phone != null" >
+        person_phone = #{person_phone},
+      </if>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <if test="logic_delete != null" >
+        logic_delete = #{logic_delete},
+      </if>
+      <if test="created_by != null" >
+        created_by = #{created_by},
+      </if>
+      <if test="updated_by != null" >
+        updated_by = #{updated_by},
+      </if>
+      <if test="created_time != null" >
+        created_time = #{created_time},
+      </if>
+      <if test="updated_time != null" >
+        updated_time = #{updated_time},
+      </if>
+      <if test="conf_region_id != null" >
+        conf_region_id = #{conf_region_id},
+      </if>
+      <if test="conf_dept_id != null" >
+        conf_dept_id = #{conf_dept_id},
+      </if>
+    </set>
+    where level_id = #{level_id,jdbcType=BIGINT}
+  </update>
+
+  <update id="deleteByPrimaryKeySelective" parameterType="pd">
+    update ass_level
+    <set>
+      logic_delete = b'1',
+      updated_by = #{updated_by},
+      updated_time = #{updated_time},
+    </set>
+    where level_id = #{level_id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="LevelMapper">
+
+    <sql id="Base_Column_List">
+        level_id, level_level, level_name, level_m, level_remark, logic_delete, created_by, updated_by, created_time, updated_time, conf_region_id, conf_dept_id
+    </sql>
+    <select id="selectByPrimaryKey" resultType="pd" parameterType="pd">
+        select
+        <include refid="Base_Column_List" />
+        from ass_level
+        where level_id = #{level_id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" parameterType="pd">
+        insert into ass_level (level_level, level_name, level_m, level_remark, logic_delete, created_by, updated_by, created_time, updated_time, conf_region_id, conf_dept_id
+        )
+        values (#{level_level}, #{level_name}, #{level_m}, #{level_remark}, #{logic_delete}, #{created_by}, #{updated_by}, #{created_time}, #{updated_time}, #{conf_region_id}, #{conf_dept_id}
+        )
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="pd">
+        update ass_level
+        <set>
+            <if test="level_level != null" >
+                level_level = #{level_level},
+            </if>
+            <if test="level_name != null" >
+                level_name = #{level_name},
+            </if>
+            <if test="level_m != null" >
+                level_m = #{level_m},
+            </if>
+            <if test="level_remark != null" >
+                level_remark = #{level_remark},
+            </if>
+            <if test="logic_delete != null" >
+                logic_delete = #{logic_delete},
+            </if>
+            <if test="created_by != null" >
+                created_by = #{created_by},
+            </if>
+            <if test="updated_by != null" >
+                updated_by = #{updated_by},
+            </if>
+            <if test="created_time != null" >
+                created_time = #{created_time},
+            </if>
+            <if test="updated_time != null" >
+                updated_time = #{updated_time},
+            </if>
+            <if test="conf_region_id != null" >
+                conf_region_id = #{conf_region_id},
+            </if>
+            <if test="conf_dept_id != null" >
+                conf_dept_id = #{conf_dept_id},
+            </if>
+        </set>
+        where level_id = #{level_id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteByPrimaryKeySelective" parameterType="pd">
+        update ass_level
+        <set>
+            logic_delete = b'1',
+            updated_by = #{updated_by},
+            updated_time = #{updated_time},
+        </set>
+        where level_id = #{level_id,jdbcType=BIGINT}
+    </update>
+
+    <select id="findByPage" resultType="pd" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List" />
+        from ass_level
+        where logic_delete = b'0'
+        <if test="keywords != null">
+            AND
+            (
+            building_name LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+            /*or
+            u.EMAIL LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')*/
+            )
+        </if>
+        ORDER BY level_id ASC
+    </select>
+
+    <select id="findListByDept" resultType="pd" parameterType="pd">
+        select
+        <include refid="Base_Column_List" />
+        from ass_level
+        where logic_delete = b'0'
+        <if test="deptids != null">
+            AND conf_dept_id IN
+            <foreach item="deptIds" index="index" collection="array" open="(" separator="," close=")">
+                #{deptIds}
+            </foreach>
+        </if>
+        <if test="keywords != null">
+            AND
+            (
+            building_name LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+            /*or
+            u.EMAIL LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')*/
+            )
+        </if>
+    </select>
+
+    <select id="findListByRegion" resultType="pd" parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List" />
+        from ass_level
+        where logic_delete = b'0'
+        <if test="regionIds != null">
+            AND conf_region_id IN
+            <foreach item="regionIds" index="index" collection="array" open="(" separator="," close=")">
+                #{regionIds}
+            </foreach>
+        </if>-->
+        <if test="keywords != null">
+            AND
+            (
+            building_name LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+            /*or
+            u.EMAIL LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')*/
+            )
+        </if>
+    </select>
+
+</mapper>

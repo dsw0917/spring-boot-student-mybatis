@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="RegionMapper" >
+    <sql id="Base_Column_List" >
+        id, region_code, region_name, region_level, parent_id, order_num, version, logic_delete
+    </sql>
+
+    <select id="findList" resultType="pd" parameterType="pd" >
+        select
+        <include refid="Base_Column_List" />
+        from conf_region
+        where logic_delete = b'0'
+    </select>
+
+    <select id="findListByDept" resultType="pd" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from conf_region
+        where logic_delete = b'0'
+        AND conf_dept_id IN
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="findListByRegion" resultType="pd" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from conf_region
+        where logic_delete = b'0'
+        AND conf_region_id IN
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+</mapper>

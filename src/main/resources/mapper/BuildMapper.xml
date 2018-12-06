@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BuildMapper">
+
+    <sql id="Base_Column_List">
+        build_id, property, license_number, land_certificate_number, year_contructor, house_structure, land_area, land_use, asset_owner, year_use, use_uint, specific_location, building_name, image, building_number, remark, time, logic_delete, created_by, updated_by, created_time, updated_time, conf_region_id, conf_dept_id
+    </sql>
+   <select id="selectByPrimaryKey" resultType="pd" parameterType="pd">
+        select
+        <include refid="Base_Column_List" />
+        from ass_build
+        where build_id = #{build_id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" parameterType="pd">
+        insert into ass_build (property, license_number, land_certificate_number, year_contructor, house_structure, land_area, land_use, asset_owner, year_use, use_uint, specific_location, building_name, image, building_number, remark, time, logic_delete, created_by, updated_by, created_time, updated_time, conf_region_id, conf_dept_id
+        )
+        values (#{property}, #{license_number}, #{land_certificate_number}, #{year_contructor}, #{house_structure}, #{land_area}, #{land_use}, #{asset_owner}, #{year_use}, #{use_uint}, #{specific_location}, #{building_name}, #{image}, #{building_number}, #{remark}, #{time}, #{logic_delete}, #{created_by}, #{updated_by}, #{created_time}, #{updated_time}, #{conf_region_id}, #{conf_dept_id}
+        )
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="pd">
+        update ass_build
+        <set>
+            <if test="property != null" >
+                property = #{property},
+            </if>
+            <if test="license_number != null" >
+                license_number = #{license_number},
+            </if>
+            <if test="land_certificate_number != null" >
+                land_certificate_number = #{land_certificate_number},
+            </if>
+            <if test="year_contructor != null" >
+                year_contructor = #{year_contructor},
+            </if>
+            <if test="house_structure != null" >
+                house_structure = #{house_structure},
+            </if>
+            <if test="land_area != null" >
+                land_area = #{land_area},
+            </if>
+            <if test="land_use != null" >
+                land_use = #{land_use},
+            </if>
+            <if test="asset_owner != null" >
+                asset_owner = #{asset_owner},
+            </if>
+            <if test="year_use != null" >
+                year_use = #{year_use},
+            </if>
+            <if test="use_uint != null" >
+                use_uint = #{use_uint},
+            </if>
+            <if test="specific_location != null" >
+                specific_location = #{specific_location},
+            </if>
+            <if test="building_name != null" >
+                building_name = #{building_name},
+            </if>
+            <if test="image != null" >
+                image = #{image},
+            </if>
+            <if test="building_number != null" >
+                building_number = #{building_number},
+            </if>
+            <if test="remark != null" >
+                remark = #{remark},
+            </if>
+            <if test="time != null" >
+                time = #{time},
+            </if>
+            <if test="logic_delete != null" >
+                logic_delete = #{logic_delete},
+            </if>
+            <if test="created_by != null" >
+                created_by = #{created_by},
+            </if>
+            <if test="updated_by != null" >
+                updated_by = #{updated_by},
+            </if>
+            <if test="created_time != null" >
+                created_time = #{created_time},
+            </if>
+            <if test="updated_time != null" >
+                updated_time = #{updated_time},
+            </if>
+            <if test="conf_region_id != null" >
+                conf_region_id = #{conf_region_id},
+            </if>
+            <if test="conf_dept_id != null" >
+                conf_dept_id = #{conf_dept_id},
+            </if>
+        </set>
+        where build_id = #{build_id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteByPrimaryKey" parameterType="pd">
+        update ass_build
+        <set>
+            logic_delete = b'1',
+            updated_by = #{updated_by},
+            updated_time = #{updated_time},
+        </set>
+        where build_id = #{build_id,jdbcType=BIGINT}
+    </update>
+
+    <select id="findByPage" resultType="pd" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List" />
+        from ass_build
+        where logic_delete = b'0'
+        <if test="keywords != null">
+            AND
+            (
+            building_name LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+            /*or
+            u.EMAIL LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')*/
+            )
+        </if>
+    </select>
+
+    <select id="findListByDept" resultType="pd" parameterType="pd">
+        select
+        <include refid="Base_Column_List" />
+        from ass_build
+        where logic_delete = b'0'
+        <if test="deptids != null">
+            AND conf_dept_id IN
+            <foreach item="deptIds" index="index" collection="array" open="(" separator="," close=")">
+                #{deptIds}
+            </foreach>
+        </if>
+        <if test="keywords != null">
+            AND
+            (
+            building_name LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+            /*or
+            u.EMAIL LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')*/
+            )
+        </if>
+    </select>
+
+    <select id="findListByRegion" resultType="pd" parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List" />
+        from ass_build
+        where logic_delete = b'0'
+        <if test="regionIds != null">
+            AND conf_region_id IN
+            <foreach item="regionIds" index="index" collection="array" open="(" separator="," close=")">
+                #{regionIds}
+            </foreach>
+        </if>-->
+        <if test="keywords != null">
+            AND
+            (
+            building_name LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+            /*or
+            u.EMAIL LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')*/
+            )
+        </if>
+    </select>
+</mapper>
