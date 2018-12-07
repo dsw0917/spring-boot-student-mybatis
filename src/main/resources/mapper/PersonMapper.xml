@@ -8,12 +8,21 @@
   <select id="selectByPrimaryKey" resultType="pd" parameterType="pd">
     select
     <include refid="Base_Column_List" />
-    from ass_level
-    where level_id = #{level_id,jdbcType=BIGINT}
+    from ass_person
+    where person_id = #{person_id,jdbcType=BIGINT}
+  </select>
+
+
+  <select id="pageListByDeptid" resultType="pd" parameterType="pd">
+    select
+    <include refid="Base_Column_List" />
+    from ass_person
+    where logic_delete = b'0'
+    and conf_dept_id = #{dept_id}
   </select>
 
   <insert id="insert" parameterType="pd">
-    insert into ass_level ( person_name, person_code, person_sex, person_phone, person_remark, level_id, department1_id, department2_id, person_remark1, person_remark2, person_remark3, person_remark4, logic_delete, created_by, updated_by, created_time, updated_time, conf_region_id, conf_dept_id
+    insert into ass_person ( person_name, person_code, person_sex, person_phone, person_remark, level_id, department1_id, department2_id, person_remark1, person_remark2, person_remark3, person_remark4, logic_delete, created_by, updated_by, created_time, updated_time, conf_region_id, conf_dept_id
     )
     values (
     #{person_name}, #{person_code}, #{person_sex}, #{person_phone}, #{person_remark}, #{level_id}, #{department1_id}, #{department2_id}, #{person_remark1}, #{person_remark2}, #{person_remark3}, #{person_remark4}, #{logic_delete}, #{created_by}, #{updated_by}, #{created_time}, #{updated_time}, #{conf_region_id}, #{conf_dept_id}
@@ -21,7 +30,7 @@
   </insert>
 
   <update id="updateByPrimaryKeySelective" parameterType="pd">
-    update ass_level
+    update ass_person
     <set>
       <if test="person_name != null" >
         person_name = #{person_name},
@@ -35,22 +44,30 @@
       <if test="person_phone != null" >
         person_phone = #{person_phone},
       </if>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      <if test="person_remark != null" >
+        person_remark = #{person_remark},
+      </if>
+      <if test="level_id != null" >
+        level_id = #{level_id},
+      </if>
+      <if test="department1_id != null" >
+        department1_id = #{department1_id},
+      </if>
+      <if test="department2_id != null" >
+        department2_id = #{department2_id},
+      </if>
+      <if test="person_remark1 != null" >
+        person_remark1 = #{person_remark1},
+      </if>
+      <if test="person_remark2 != null" >
+        person_remark2 = #{person_remark2},
+      </if>
+      <if test="person_remark3 != null" >
+        person_remark3 = #{person_remark3},
+      </if>
+      <if test="person_remark4 != null" >
+        person_remark4 = #{person_remark4},
+      </if>
       <if test="logic_delete != null" >
         logic_delete = #{logic_delete},
       </if>
@@ -77,7 +94,7 @@
   </update>
 
   <update id="deleteByPrimaryKeySelective" parameterType="pd">
-    update ass_level
+    update ass_person
     <set>
       logic_delete = b'1',
       updated_by = #{updated_by},

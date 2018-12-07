@@ -35,4 +35,9 @@ public interface PersonService {
      * 根据主键id 删除记录
      * */
     boolean delete(PageData pd) throws Exception;
+
+    /**
+     * 根据主键部门id 获取人员列表
+     * */
+    Page<PageData> pageListByDeptid (PageData pd) throws Exception;
 }

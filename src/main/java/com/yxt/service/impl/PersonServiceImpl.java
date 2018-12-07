@@ -18,7 +18,10 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Created by yuhao.wang on 2017/6/19.
+ *
+ *
+ * @author yxt06
+ * @date 2017/6/19
  */
 @Service
 public class PersonServiceImpl implements PersonService {
@@ -70,6 +73,14 @@ public class PersonServiceImpl implements PersonService {
         }else{
             return false;
         }
+    }
+
+    @Override
+    public Page<PageData> pageListByDeptid(PageData pd) throws Exception {
+        PageHelper.startPage((Integer) pd.get("pageNum"), (Integer)pd.get("pageSize"));
+        Page<PageData> page = new Page<>();
+        page = (Page<PageData>) dao.findForList("PersonMapper.pageListByDeptid", pd);
+        return page;
     }
 
 }
