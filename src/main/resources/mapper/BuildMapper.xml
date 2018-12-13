@@ -151,7 +151,7 @@
             <foreach item="regionIds" index="index" collection="array" open="(" separator="," close=")">
                 #{regionIds}
             </foreach>
-        </if>-->
+        </if>
         <if test="keywords != null">
             AND
             (

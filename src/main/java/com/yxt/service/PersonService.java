@@ -40,4 +40,7 @@ public interface PersonService {
      * 根据主键部门id 获取人员列表
      * */
     Page<PageData> pageListByDeptid (PageData pd) throws Exception;
+
+    Page<PageData> personListByDept (PageData pd) throws Exception;
+
 }

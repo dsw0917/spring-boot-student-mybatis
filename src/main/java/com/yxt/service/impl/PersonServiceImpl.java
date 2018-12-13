@@ -5,7 +5,10 @@ import com.github.pagehelper.PageHelper;
 import com.yxt.dao.DaoSupport;
 import com.yxt.domain.entity.PageData;
 import com.yxt.domain.entity.Person;
+import com.yxt.officialVehicl.core.base.constants.BaseConstants;
 import com.yxt.officialVehicl.core.jwt.UserInfoFactory;
+import com.yxt.officialVehicl.core.util.UrlInfoFactory;
+import com.yxt.officialVehicl.management.resource.entity.ResourceRule;
 import com.yxt.officialVehicl.management.user.entity.User;
 import com.yxt.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,6 +83,33 @@ public class PersonServiceImpl implements PersonService {
         PageHelper.startPage((Integer) pd.get("pageNum"), (Integer)pd.get("pageSize"));
         Page<PageData> page = new Page<>();
         page = (Page<PageData>) dao.findForList("PersonMapper.pageListByDeptid", pd);
+        return page;
+    }
+
+    @Override
+    public Page<PageData> personListByDept(PageData pd) throws Exception {
+        ResourceRule r = UrlInfoFactory.get("lou");
+        UrlInfoFactory.print();
+        int i = r.getResourceRule();
+        PageHelper.startPage((Integer) pd.get("pageNum"), (Integer)pd.get("pageSize"));
+        Page<PageData> page = new Page<>();
+        if(i == BaseConstants.RESOURCE_RULE_ALL){
+            page = (Page<PageData>) dao.findForList("PersonMapper.findByPage", pd);
+        }else if(i == BaseConstants.RESOURCE_RULE_DEPT || i == BaseConstants.RESOURCE_RULE_DEPT_SUB){
+            List strs = r.getDeptIds();
+            pd.put("deptIds", strs.toString());
+            page = (Page<PageData>) dao.findForList("PersonMapper.findListByDept", pd);
+        }else if(i == BaseConstants.RESOURCE_RULE_REGION|| i == BaseConstants.RESOURCE_RULE_REGION_SUB){
+            List strs = r.getRegionIds();
+            pd.put("regionIds", strs.toString());
+            page = (Page<PageData>) dao.findForList("PersonMapper.findListByRegion", pd);
+        }else if(i == BaseConstants.RESOURCE_RULE_DEPT_CUSTOM){
+            pd.put("deptIds", r.getCustomRule());
+            page = (Page<PageData>) dao.findForList("PersonMapper.findListByDept", pd);
+        }else if(i == BaseConstants.RESOURCE_RULE_REGION_CUSTOM){
+            pd.put("regionIds" ,r.getCustomRule());
+            page = (Page<PageData>) dao.findForList("PersonMapper.findListByRegion", pd);
+        }
         return page;
     }
 

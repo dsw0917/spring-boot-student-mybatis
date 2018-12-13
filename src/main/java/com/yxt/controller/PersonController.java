@@ -17,7 +17,9 @@ import java.math.BigInteger;
 import java.util.List;
 
 /**
- * Created by yxt06 on 2018/12/6.
+ *
+ * @author yxt06
+ * @date 2018/12/6
  */
 @RestController
 @RequestMapping("person")
@@ -69,6 +71,18 @@ public class PersonController extends BaseController{
         Page<PageData> page = null;
         try {
             page = personService.pageListByDeptid(pd);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new JsonInfo(page);
+    }
+
+    @RequestMapping(value = "/personListByDept", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public JsonInfo personListByDept(){
+        PageData pd = this.getPageData();
+        Page<PageData> page = null;
+        try {
+            page = personService.personListByDept(pd);
         } catch (Exception e) {
             e.printStackTrace();
         }

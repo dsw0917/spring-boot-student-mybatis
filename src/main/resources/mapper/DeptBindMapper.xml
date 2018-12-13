@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DeptBindMapper">
+    <select id="findAllDept" resultType="pd" parameterType="pd">
+        SELECT
+        id, dept_name, parent_id
+        FROM conf_dept
+        WHERE logic_delete = b'0'
+    </select>
+
+    <select id="findListByDept" resultType="pd" parameterType="java.lang.String">
+        SELECT
+        id, dept_name, parent_id
+        FROM conf_dept
+        WHERE logic_delete = b'0'
+        AND id IN
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="findListByRegion" resultType="pd" parameterType="java.lang.String">
+        SELECT
+        id, dept_name, parent_id
+        FROM conf_dept
+        WHERE logic_delete = b'0'
+        AND conf_region_id IN
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="roomByDept" resultType="pd" parameterType="pd">
+        SELECT t2.room_id, t2.room_number
+        FROM ass_room_dept t1 LEFT JOIN ass_room t2 ON t1.room_id = t2.room_id
+        WHERE t2.logic_delete = b'0'
+        AND t1.dept_id = #{dept_id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteByDept" parameterType="pd">
+        DELETE FROM ass_room_dept WHERE dept_id = #{dept_id,jdbcType=BIGINT}
+    </delete>
+
+    <insert id="RoomBindDept" parameterType="pd">
+        insert into ass_room_dept (room_id, dept_id) VALUE (#{room_id,jdbcType=BIGINT}, #{dept_id,jdbcType=BIGINT})
+    </insert>
+
+
+    <select id="findAllBuild" resultType="pd" parameterType="pd">
+        SELECT
+        build_id, building_name, conf_region_id, conf_dept_id
+        FROM ass_build
+        WHERE logic_delete = b'0'
+    </select>
+
+    <select id="findBuildListByDept" resultType="pd" parameterType="java.lang.String">
+        SELECT
+        build_id, building_name, conf_region_id, conf_dept_id
+        FROM ass_build
+        WHERE logic_delete = b'0'
+        AND conf_dept_id IN
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="findBuildListByRegion" resultType="pd" parameterType="java.lang.String">
+        SELECT
+        build_id, building_name, conf_region_id, conf_dept_id
+        FROM ass_build
+        WHERE logic_delete = b'0'
+        AND conf_region_id IN
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+</mapper>

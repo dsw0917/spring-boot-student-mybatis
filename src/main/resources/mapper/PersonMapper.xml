@@ -102,4 +102,37 @@
     </set>
     where level_id = #{level_id,jdbcType=BIGINT}
   </update>
+
+  <select id="findByPage" resultType="pd" parameterType="pd">
+    select
+    <include refid="Base_Column_List" />
+    from ass_person
+    where logic_delete = b'0'
+  </select>
+
+  <select id="findListByDept" resultType="pd" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List" />
+    from ass_person
+    where logic_delete = b'0'
+    <if test="deptids != null">
+      AND conf_dept_id IN
+      <foreach item="deptIds" index="index" collection="array" open="(" separator="," close=")">
+        #{deptIds}
+      </foreach>
+    </if>
+  </select>
+
+  <select id="findListByRegion" resultType="pd" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List" />
+    from ass_person
+    where logic_delete = b'0'
+    <if test="regionIds != null">
+      AND conf_region_id IN
+      <foreach item="regionIds" index="index" collection="array" open="(" separator="," close=")">
+        #{regionIds}
+      </foreach>
+    </if>
+  </select>
 </mapper>
