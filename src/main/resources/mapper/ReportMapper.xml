@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ReportMapper">
+
+    <select id="findAllRegion" resultType="pd" parameterType="pd">
+        SELECT
+        id, region_name, parent_id
+        FROM conf_region
+        WHERE logic_delete = b'0'
+    </select>
+
+    <select id="findListByRegion" resultType="pd" parameterType="java.lang.String">
+        SELECT
+        id, region_name, parent_id
+        FROM conf_region
+        WHERE logic_delete = b'0'
+        AND id IN
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+
+
+    <select id="buildListByRegionid" resultType="pd" parameterType="pd">
+        SELECT p1.build_id, p1.building_name, p2.real_area, p2.level_area,(p2.real_area-p2.level_area) AS m,
+        COUNT(p2.room_id) AS cou
+
+        FROM ass_build p1
+        LEFT JOIN
+        (
+        SELECT t1.room_id, t2.real_area, SUM(t4.level_m) AS level_area, t2.build_id
+        FROM ass_room_person t1
+        LEFT JOIN ass_room t2 ON t1.room_id = t2.room_id
+        LEFT JOIN ass_person t3 ON t1.person_id = t3.person_id
+        LEFT JOIN ass_level t4 ON t3.level_id = t4.level_id
+        WHERE t2.logic_delete = b'0'
+        ) p2 ON p1.build_id = p2.build_id
+        WHERE p1.logic_delete = b'0'
+        AND p2.real_area > p2.level_area
+        AND p2.conf_region_id = ##{region_id,jdbcType=BIGINT}
+        GROUP BY p1.build_id
+    </select>
+
+    <select id="roomListByBuildid" resultType="pd" parameterType="pd">
+        SELECT t1.room_id, t2.real_area, SUM(t4.level_m) AS level_area, t2.build_id,
+        (t2.real_area-t4.level_m) AS m, GROUP_CONCAT(t3.person_name) AS person_name
+        FROM ass_room_person t1
+        LEFT JOIN ass_room t2 ON t1.room_id = t2.room_id
+        LEFT JOIN ass_person t3 ON t1.person_id = t3.person_id
+        LEFT JOIN ass_level t4 ON t3.level_id = t4.level_id
+        WHERE t2.logic_delete = b'0'
+        AND t2.build_id = #{build_id}
+        GROUP BY t1.room_id
+    </select>
+
+
+</mapper>

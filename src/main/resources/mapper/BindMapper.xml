@@ -20,6 +20,17 @@
         </foreach>
     </select>
 
+    <select id="findListByRegion" resultType="pd" parameterType="java.lang.String">
+        select
+        id, dept_name, parent_id
+        from conf_dept
+        where logic_delete = b'0'
+        AND region_id IN
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
     <!--<select id="roomListBydeptid" resultType="pd" parameterType="pd">
         select
           t1.room_id, t1.dept_id, t2.room_code

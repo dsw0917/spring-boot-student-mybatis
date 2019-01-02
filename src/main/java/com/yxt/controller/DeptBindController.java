@@ -17,13 +17,13 @@ import java.util.List;
  * @date 2018/12/12
  */
 @RestController
-@RequestMapping("bind")
+@RequestMapping("deptbind")
 public class DeptBindController extends BaseController {
     @Autowired
     DeptBindService deptBindService;
 
     /**
-     *
+     * 获取当前用户可视的机构列表
      */
     @RequestMapping(value = "/deptList", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public JsonInfo deptList() throws Exception{
